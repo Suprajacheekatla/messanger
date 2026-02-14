@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Messenger App</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background: #e5e5e5;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .app {
+        width: 900px;
+        height: 550px;
+        background: white;
+        display: flex;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 30%;
+        background: #f4f4f4;
+        border-right: 1px solid #ddd;
+        padding: 15px;
+    }
+
+    .sidebar h2 {
+        margin-bottom: 15px;
+    }
+
+    .contact {
+        padding: 10px;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .contact:hover {
+        background: #e8f0fe;
+    }
+
+    /* Chat section */
+    .chat {
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        background: #0084ff;
+        color: white;
+        padding: 15px;
+        font-size: 18px;
+    }
+
+    .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background: #f0f2f5;
+    }
+
+    .message {
+        max-width: 60%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 10px;
+        clear: both;
+    }
+
+    .sent {
+        background: #0084ff;
+        color: white;
+        float: right;
+    }
+
+    .received {
+        background: #ddd;
+        float: left;
+    }
+
+    .chat-input {
+        display: flex;
+        border-top: 1px solid #ddd;
+    }
+
+    .chat-input input {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        outline: none;
+        font-size: 16px;
+    }
+
+    .chat-input button {
+        padding: 12px 20px;
+        background: #0084ff;
+        border: none;
+        color: white;
+        cursor: pointer;
+    }
+
+    .chat-input button:hover {
+        background: #006fd6;
+    }
+</style>
+</head>
+<body>
+
+<div class="app">
+    <div class="sidebar">
+        <h2>Chats</h2>
+        <div class="contact" onclick="selectContact('Alice')">Alice</div>
+        <div class="contact" onclick="selectContact('John')">John</div>
+        <div class="contact" onclick="selectContact('Emma')">Emma</div>
+    </div>
+
+    <div class="chat">
+        <div class="chat-header" id="chatHeader">Select a contact</div>
+        <div class="chat-messages" id="chatMessages"></div>
+
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Type a message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentContact = null;
+
+function selectContact(name) {
+    currentContact = name;
+    document.getElementById("chatHeader").innerText = name;
+    document.getElementById("chatMessages").innerHTML = "";
+}
+
+function sendMessage() {
+    const input = document.getElementById("messageInput");
+    const text = input.value.trim();
+
+    if (!text || !currentContact) return;
+
+    addMessage(text, "sent");
+    input.value = "";
+
+    // Simulated reply
+    setTimeout(() => {
+        addMessage("Auto reply from " + currentContact, "received");
+    }, 800);
+}
+
+function addMessage(text, type) {
+    const msgBox = document.getElementById("chatMessages");
+    const msg = document.createElement("div");
+    msg.className = "message " + type;
+    msg.innerText = text;
+    msgBox.appendChild(msg);
+    msgBox.scrollTop = msgBox.scrollHeight;
+}
+
+// Send on Enter key
+document.getElementById("messageInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") sendMessage();
+});
+</script>
+
+</body>
+</html>
+
